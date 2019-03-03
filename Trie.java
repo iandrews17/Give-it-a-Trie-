@@ -91,4 +91,50 @@ public class Trie
     }
   }
 
+  public void checkForScores(String word,char [] deck, int maxLength, int currentLength)
+  {
+    String bestWord = "";
+    boolean [] used = new boolean [deck.length];
+    StringBuilder builder = new StringBuilder(word);
+    String bestWord = checkForScores(builder, deck, used, maxLength, currentLength, root, bestWord);
+  }
+
+  private String checkForScores(StringBuilder word, char [] deck, boolean [] used, int maxLength, int currentLength, TrieNode node, String bestWord)
+  {
+
+    if (currentLength == maxLength && node.isWord)
+    {
+      word.append(node.letter);
+      String newWord = word.toString();
+      if (addLettersTogether(newWord) > addLettersTogether(bestWord))
+      {
+        bestWord = newWord;
+      }
+
+      return bestWord;
+    }
+
+    for (int i = 0; i < 26; i++)
+    {
+      if (node.children[i] != null)
+      {
+        for (int j = 0; j < deck.length; j++)
+        {
+          if (deck[j] ==(char) i + 'A' && used[j] == false)
+          {
+            used[j] = true;
+            if (node != root)
+            {
+              word.append(node.letter);
+            }
+            bestWord = checkForScores(word, deck, used, maxLength, currentLength, node.children[i], bestWord);
+            used[j] = false;
+          }
+        }
+      }
+    }
+
+    return bestWord;
+  }
+
 }
