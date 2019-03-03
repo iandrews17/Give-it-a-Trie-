@@ -96,7 +96,39 @@ public class Trie
     String bestWord = "";
     boolean [] used = new boolean [deck.length];
     StringBuilder builder = new StringBuilder(word);
-    String bestWord = checkForScores(builder, deck, used, maxLength, currentLength, root, bestWord);
+    TrieNode startingNode = checkforStartingLetters(builder, maxLength, currentLength, root, bestWord);
+    bestWord = checkForScores(builder, deck, used, maxLength, currentLength, startingNode, bestWord);
+    System.out.println("Your best word is " + bestWord);
+  }
+
+  private TrieNode checkforStartingLetters(StringBuilder word, int maxLength, int currentLength, TrieNode root, String bestWord)
+  {
+    // if (currentLength == maxLength)
+    // {
+    //   word.append(node.letter);
+    //   String newWord = word.toString();
+    //   if (addLettersTogether(newWord) > addLettersTogether(bestWord))
+    //   {
+    //     bestWord = newWord;
+    //   }
+    //   System.out.println("New best word is " + bestWord);
+    // }
+
+    TrieNode current = root;
+    for (int i = 0; i < word.length(); i++)
+    {
+      char letter;
+      letter = word.charAt(i);
+      int index = (int) letter - 'A';
+      if (current.children[index] == null)
+      {
+        return current;
+      }
+
+      current = current.children[index];
+    }
+
+    return current;
   }
 
   private String checkForScores(StringBuilder word, char [] deck, boolean [] used, int maxLength, int currentLength, TrieNode node, String bestWord)
@@ -110,7 +142,7 @@ public class Trie
       {
         bestWord = newWord;
       }
-
+      System.out.println("New best word is " + bestWord);
       return bestWord;
     }
 
@@ -127,7 +159,12 @@ public class Trie
             {
               word.append(node.letter);
             }
-            bestWord = checkForScores(word, deck, used, maxLength, currentLength, node.children[i], bestWord);
+            bestWord = checkForScores(word, deck, used, maxLength, currentLength + 1, node.children[i], bestWord);
+            if (node != root)
+            {
+              word.deleteCharAt(word.length() - 1);
+            }
+
             used[j] = false;
           }
         }
@@ -135,6 +172,20 @@ public class Trie
     }
 
     return bestWord;
+  }
+
+  public int addLettersTogether(String word)
+  {
+    int[] points = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
+    int length = word.length();
+    int total = 0;
+
+    for (int i = 0; i < length; i++)
+    {
+      total += points[word.charAt(i) - 'A'];
+    }
+
+    return total;
   }
 
 }

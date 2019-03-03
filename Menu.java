@@ -41,24 +41,26 @@ public class Menu extends Trie
     char []array= new char[numLetters];
     for(int n=0; n<numLetters; n++){
       array[n]=str.charAt(n);
+      array[n] = Character.toUpperCase(array[n]);
     }
     System.out.println("Enter the letter(s) you would like the word to start with");
     startingletters=s.next();
+    startingletters = startingletters.toUpperCase();
     System.out.println("Enter the length of the word you would want to place on the board");
     String lengthString=s.next();
     length = Integer.parseInt(lengthString);
 
 
     Trie trie = new Trie();
-    boolean [] used = new boolean [numLetters];
-    trie.checkForScores(startingletters, array, used, length, 0);
+    trie.createTrie();
+    trie.checkForScores(startingletters, array,length , startingletters.length());
   }
 
 
   System.out.println("Press i insert values");
   System.out.println("Press r to restart");
   System.out.println("Press q to quit");
-  c=s.next().charAt(0);
+  c = s.next().charAt(0);
   }
  }
 
