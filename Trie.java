@@ -97,23 +97,13 @@ public class Trie
     boolean [] used = new boolean [deck.length];
     StringBuilder builder = new StringBuilder(word);
     TrieNode startingNode = checkforStartingLetters(builder, maxLength, currentLength, root, bestWord);
+    builder.deleteCharAt(word.length() - 1);
     bestWord = checkForScores(builder, deck, used, maxLength, currentLength, startingNode, bestWord);
-    System.out.println("Your best word is " + bestWord);
+    System.out.println("Your best word is " + bestWord + " for " + addLettersTogether(bestWord) + " points");
   }
 
   private TrieNode checkforStartingLetters(StringBuilder word, int maxLength, int currentLength, TrieNode root, String bestWord)
   {
-    // if (currentLength == maxLength)
-    // {
-    //   word.append(node.letter);
-    //   String newWord = word.toString();
-    //   if (addLettersTogether(newWord) > addLettersTogether(bestWord))
-    //   {
-    //     bestWord = newWord;
-    //   }
-    //   System.out.println("New best word is " + bestWord);
-    // }
-
     TrieNode current = root;
     for (int i = 0; i < word.length(); i++)
     {
@@ -134,9 +124,15 @@ public class Trie
   private String checkForScores(StringBuilder word, char [] deck, boolean [] used, int maxLength, int currentLength, TrieNode node, String bestWord)
   {
 
-    if (currentLength == maxLength && node.isWord)
+
+    if (currentLength > maxLength)
+    {
+      return bestWord;
+    }
+    if (currentLength == maxLength && node.isWord && word.length() == maxLength - 1)
     {
       word.append(node.letter);
+
       String newWord = word.toString();
       if (addLettersTogether(newWord) > addLettersTogether(bestWord))
       {
@@ -152,12 +148,17 @@ public class Trie
       {
         for (int j = 0; j < deck.length; j++)
         {
-          if (deck[j] ==(char) i + 'A' && used[j] == false)
+          if (deck[j] == (char) i + 'A' && (used[j] == false));
           {
+
             used[j] = true;
-            if (node != root)
+            for (int k = 0; k < deck.length; k++)
             {
-              word.append(node.letter);
+              if (deck[k] == node.letter)
+              {
+                word.append(node.letter);
+                System.out.println(word);
+              }
             }
             bestWord = checkForScores(word, deck, used, maxLength, currentLength + 1, node.children[i], bestWord);
             if (node != root)

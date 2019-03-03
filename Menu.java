@@ -53,7 +53,7 @@ public class Menu extends Trie
 
     Trie trie = new Trie();
     trie.createTrie();
-    trie.checkForScores(startingletters, array,length , startingletters.length());
+    trie.checkForScores(startingletters, array, length, startingletters.length());
   }
 
 
